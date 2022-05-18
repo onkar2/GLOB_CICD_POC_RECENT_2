@@ -2,6 +2,7 @@
 -------------------------------------1. PLATFORM_PROJECT_EVENT------------------------------------------------
 
 
+
 create or replace table  "UNITY_PROD_DB"."UNITY_STAGING"."LOG"  like  "UNITY_DEV_DB"."UNITY_STAGING"."LOG" ;
 
 create or replace table "UNITY_PROD_DB"."UNITY_STAGING"."STG_PLATFORM_PROJECT_EVENT"  like  "UNITY_DEV_DB"."UNITY_STAGING"."STG_PLATFORM_PROJECT_EVENT" ;

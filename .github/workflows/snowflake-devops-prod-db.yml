@@ -31,7 +31,7 @@ jobs:
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
           SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
-          SNOWFLAKE_TEST_ROLE: ${{ secrets.SNOWFLAKE_TEST_ROLE }}
+          SNOWFLAKE_PROD_ROLE: ${{ secrets.SNOWFLAKE_PROD_ROLE }}
           SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
           SNOWFLAKE_PROD_DATABASE: ${{ secrets.SNOWFLAKE_PROD_DATABASE }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
@@ -42,4 +42,4 @@ jobs:
           pip install schemachange
           
           echo "STEP 2: Running schemachange"
-          schemachange -f $GITHUB_WORKSPACE/prod_scripts -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_TEST_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_PROD_DATABASE -c $SNOWFLAKE_PROD_DATABASE.STAGING.CHANGE_HISTORY --create-change-history-table -v -ac 
+          schemachange -f $GITHUB_WORKSPACE/prod_scripts -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_PROD_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_PROD_DATABASE -c $SNOWFLAKE_PROD_DATABASE.SCHEMACHANGE.CHANGE_HISTORY --create-change-history-table -v -ac 

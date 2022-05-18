@@ -1,0 +1,45 @@
+name: snowflake-devops-prod-db
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: 
+      - main
+    paths:
+      - 'prod_scripts/**'
+    
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deploy-snowflake-changes-job:
+    runs-on: ubuntu-20.04
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout repository
+        uses: actions/checkout@v2
+     
+      - name: Use Python 3.8.x
+        uses: actions/setup-python@v2.2.1
+        with:
+          python-version: 3.8.x
+         
+      - name: Run schemachange
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_TEST_ROLE: ${{ secrets.SNOWFLAKE_TEST_ROLE }}
+          SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_PROD_DATABASE: ${{ secrets.SNOWFLAKE_PROD_DATABASE }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+        run: |
+          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+          python --version
+          echo "STEP 1: Installing schemachange"
+          pip install schemachange
+          
+          echo "STEP 2: Running schemachange"
+          schemachange -f $GITHUB_WORKSPACE/prod_scripts -a $SNOWFLAKE_ACCOUNT -u $SNOWFLAKE_USER -r $SNOWFLAKE_TEST_ROLE -w $SNOWFLAKE_WAREHOUSE -d $SNOWFLAKE_PROD_DATABASE -c $SNOWFLAKE_PROD_DATABASE.STAGING.CHANGE_HISTORY --create-change-history-table -v -ac 
